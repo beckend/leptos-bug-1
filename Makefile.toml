@@ -1,0 +1,11 @@
+[tasks.pre-production]
+script = '''
+#!/usr/bin/env bash
+USER_SHELL="${SHELL}"
+
+# minify main css, leptos does not do this, lightningcss also removes imports and inlines content
+"${USER_SHELL}" -c "lightningcss --minify --bundle --targets '>= 0.25%' ./target/site/pkg/this-app.css -o ./target/site/pkg/this-app.css"
+# compress all
+"${USER_SHELL}" -c "precompress ./target/site --brotli --zstd"
+# then create a container image
+'''
